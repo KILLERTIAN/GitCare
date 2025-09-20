@@ -16,26 +16,15 @@ import {
   SheetContent,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { Moon, Sun, Menu, X, Wallet, Github, Mountain } from 'lucide-react';
+import { Menu, X, Wallet, Github, Mountain } from 'lucide-react';
 import Image from 'next/image';
 
 export default function Navbar() {
-  const [isDarkMode, setIsDarkMode] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [isConnecting, setIsConnecting] = useState(false);
 
-  // Initialize theme from localStorage or default to dark
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
-      setIsDarkMode(false);
-      document.documentElement.classList.remove('dark');
-    } else {
-      setIsDarkMode(true);
-      document.documentElement.classList.add('dark');
-    }
-  }, []);
+
 
   const navigationItems = [
     { name: 'Dashboard', href: '/dashboard' },
@@ -63,9 +52,9 @@ export default function Navbar() {
             method: 'wallet_switchEthereumChain',
             params: [{ chainId: '0xA869' }], // Fuji testnet chain ID
           });
-        } catch (switchError: any) {
+        } catch (switchError: unknown) {
           // If the chain doesn't exist, add it
-          if (switchError.code === 4902) {
+          if ((switchError as { code?: number }).code === 4902) {
             await window.ethereum.request({
               method: 'wallet_addEthereumChain',
               params: [

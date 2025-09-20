@@ -2,13 +2,13 @@
 
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import React, { forwardRef, useRef } from "react";
+import React, { useRef } from "react";
 
 export interface AnimatedBeamProps {
   className?: string;
-  containerRef: React.RefObject<HTMLElement>;
-  fromRef: React.RefObject<HTMLElement>;
-  toRef: React.RefObject<HTMLElement>;
+  containerRef: React.RefObject<HTMLElement | null>;
+  fromRef: React.RefObject<HTMLElement | null>;
+  toRef: React.RefObject<HTMLElement | null>;
   curvature?: number;
   reverse?: boolean;
   pathColor?: string;
@@ -30,7 +30,7 @@ export const AnimatedBeam: React.FC<AnimatedBeamProps> = ({
   fromRef,
   toRef,
   curvature = 0,
-  reverse = false,
+  reverse = false, // eslint-disable-line @typescript-eslint/no-unused-vars
   duration = Math.random() * 3 + 4,
   delay = 0,
   pathColor = "gray",
