@@ -127,7 +127,7 @@ export function ProjectDiscovery() {
               placeholder="Search projects..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 glass"
+              className="pl-10 glass-input"
             />
           </div>
           <div className="flex gap-2">
@@ -157,21 +157,21 @@ export function ProjectDiscovery() {
               whileHover={{ y: -8, scale: 1.02 }}
               className="group"
             >
-              <Card className="glass-card hover-lift h-full">
+              <Card variant="glass" className="h-full">
                 <CardHeader>
                   <div className="flex justify-between items-start mb-2">
                     <Badge 
-                      variant={project.status === "Hot" ? "destructive" : project.status === "New" ? "default" : "secondary"}
-                      className="animate-pulse"
+                      variant={project.status === "Hot" ? "destructive" : project.status === "New" ? "glass-neon" : "glass"}
+                      className={project.status === "Hot" ? "animate-pulse" : ""}
                     >
                       {project.status}
                     </Badge>
                     <div className="text-right">
-                      <div className="text-lg font-bold text-primary">{project.bounty}</div>
+                      <div className="text-lg font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">{project.bounty}</div>
                       <div className="text-xs text-muted-foreground">{project.difficulty}</div>
                     </div>
                   </div>
-                  <CardTitle className="text-xl mb-2 group-hover:text-primary transition-colors">
+                  <CardTitle className="text-xl mb-2 group-hover:bg-gradient-to-r group-hover:from-blue-400 group-hover:to-purple-400 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
                     {project.title}
                   </CardTitle>
                 </CardHeader>
@@ -182,23 +182,23 @@ export function ProjectDiscovery() {
                   
                   <div className="flex flex-wrap gap-1 mb-4">
                     {project.tags.map((tag) => (
-                      <Badge key={tag} variant="outline" className="text-xs">
+                      <Badge key={tag} variant="glass" className="text-xs hover:scale-105 transition-transform duration-200">
                         {tag}
                       </Badge>
                     ))}
                   </div>
 
-                  <div className="flex justify-between items-center text-sm text-muted-foreground mb-4">
+                  <div className="flex justify-between items-center text-sm mb-4">
                     <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1 text-muted-foreground group-hover:text-yellow-400 transition-colors duration-300">
                         <Star className="h-4 w-4" />
                         <span>{project.stars.toLocaleString()}</span>
                       </div>
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1 text-muted-foreground group-hover:text-blue-400 transition-colors duration-300">
                         <GitFork className="h-4 w-4" />
                         <span>{project.forks}</span>
                       </div>
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1 text-muted-foreground group-hover:text-green-400 transition-colors duration-300">
                         <Users className="h-4 w-4" />
                         <span>{project.maintainers}</span>
                       </div>

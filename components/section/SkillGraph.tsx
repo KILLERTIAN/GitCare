@@ -55,10 +55,10 @@ export function SkillGraph() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl lg:text-5xl font-bold mb-4 gradient-text">
+          <h2 className="text-4xl lg:text-5xl font-bold mb-4 gradient-text text-shadow-medium">
             Skill Matrix
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-accessible max-w-2xl mx-auto">
             Visualize your technical expertise and discover growth opportunities
           </p>
         </motion.div>
@@ -71,30 +71,31 @@ export function SkillGraph() {
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <Card className="glass-card h-full">
+            <Card className="glass-card-primary hover-lift h-full">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5 text-primary" />
+                <CardTitle className="flex items-center gap-2 text-high-contrast">
+                  <Target className="h-5 w-5 text-blue-300" />
                   Your Tech Stack
                 </CardTitle>
-                <div className="text-sm text-muted-foreground">
-                  Overall Skill Level: <span className="text-primary font-semibold">{averageSkill.toFixed(1)}%</span>
+                <div className="text-sm text-medium-contrast">
+                  Overall Skill Level: <span className="text-high-contrast font-semibold">{averageSkill.toFixed(1)}%</span>
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="h-80">
+                {/* Enhanced chart container with better background for readability */}
+                <div className="h-80 p-4 rounded-lg bg-black/20 backdrop-blur-sm border border-white/10">
                   <ResponsiveContainer width="100%" height="100%">
                     <RadarChart data={skillData}>
                       <PolarGrid 
-                        stroke="hsl(var(--border))"
-                        className="opacity-30"
+                        stroke="rgba(255, 255, 255, 0.3)"
+                        strokeWidth={1}
                       />
                       <PolarAngleAxis 
                         dataKey="skill" 
                         tick={{ 
                           fontSize: 12, 
-                          fill: "hsl(var(--foreground))",
-                          fontWeight: 500
+                          fill: "rgba(255, 255, 255, 0.9)",
+                          fontWeight: 600
                         }}
                       />
                       <PolarRadiusAxis 
@@ -102,38 +103,39 @@ export function SkillGraph() {
                         domain={[0, 100]}
                         tick={{ 
                           fontSize: 10, 
-                          fill: "hsl(var(--muted-foreground))"
+                          fill: "rgba(255, 255, 255, 0.7)",
+                          fontWeight: 500
                         }}
                       />
                       <Radar
                         name="Current"
                         dataKey="current"
-                        stroke="hsl(var(--primary))"
-                        fill="hsl(var(--primary))"
-                        fillOpacity={0.2}
-                        strokeWidth={2}
+                        stroke="#60a5fa"
+                        fill="#60a5fa"
+                        fillOpacity={0.3}
+                        strokeWidth={3}
                       />
                       <Radar
                         name="Target"
                         dataKey="target"
-                        stroke="hsl(var(--secondary))"
-                        fill="hsl(var(--secondary))"
-                        fillOpacity={0.1}
+                        stroke="#a78bfa"
+                        fill="#a78bfa"
+                        fillOpacity={0.15}
                         strokeWidth={2}
-                        strokeDasharray="5 5"
+                        strokeDasharray="8 4"
                       />
                     </RadarChart>
                   </ResponsiveContainer>
                 </div>
                 
-                <div className="flex justify-center gap-6 mt-4 text-sm">
+                <div className="flex justify-center gap-6 mt-4 text-sm text-medium-contrast">
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-primary rounded-full"></div>
-                    <span>Current Level</span>
+                    <div className="w-3 h-3 bg-blue-400 rounded-full shadow-sm"></div>
+                    <span className="font-medium">Current Level</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 border-2 border-secondary rounded-full border-dashed"></div>
-                    <span>Target Level</span>
+                    <div className="w-3 h-3 border-2 border-purple-400 rounded-full border-dashed"></div>
+                    <span className="font-medium">Target Level</span>
                   </div>
                 </div>
               </CardContent>
@@ -149,10 +151,10 @@ export function SkillGraph() {
               transition={{ duration: 0.8, delay: 0.4 }}
               viewport={{ once: true }}
             >
-              <Card className="glass-card">
+              <Card className="glass-card hover-lift">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <TrendingUp className="h-5 w-5 text-secondary" />
+                  <CardTitle className="flex items-center gap-2 text-high-contrast">
+                    <TrendingUp className="h-5 w-5 text-green-400" />
                     Skill Breakdown
                   </CardTitle>
                 </CardHeader>
@@ -165,25 +167,25 @@ export function SkillGraph() {
                         whileInView={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5, delay: index * 0.1 }}
                         viewport={{ once: true }}
-                        className="flex items-center justify-between p-3 rounded-lg bg-glass/30 hover:bg-glass/50 transition-colors"
+                        className="flex items-center justify-between p-3 rounded-lg bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 group"
                       >
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="font-semibold">{skill.skill}</span>
-                            <Badge variant="outline" className="text-xs">
+                            <span className="font-semibold text-medium-contrast group-hover:text-high-contrast transition-colors">{skill.skill}</span>
+                            <Badge variant="outline" className="text-xs bg-blue-500/20 border-blue-400/30 text-high-contrast">
                               {skill.current}%
                             </Badge>
                           </div>
-                          <div className="text-xs text-muted-foreground">
+                          <div className="text-xs text-accessible">
                             {skill.label}
                           </div>
                         </div>
                         
                         <div className="text-right">
-                          <div className="text-sm font-semibold text-primary">
+                          <div className="text-sm font-semibold text-blue-300 group-hover:text-blue-200 transition-colors text-shadow-light">
                             Target: {skill.target}%
                           </div>
-                          <div className="text-xs text-muted-foreground">
+                          <div className="text-xs text-accessible">
                             +{skill.target - skill.current} to go
                           </div>
                         </div>
@@ -201,13 +203,13 @@ export function SkillGraph() {
               transition={{ duration: 0.8, delay: 0.6 }}
               viewport={{ once: true }}
             >
-              <Card className="glass-card">
+              <Card className="glass-card hover-lift">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Zap className="h-5 w-5 text-yellow-400" />
+                  <CardTitle className="flex items-center gap-2 text-high-contrast">
+                    <Zap className="h-5 w-5 text-yellow-400 drop-shadow-sm" />
                     AI Recommendations
                   </CardTitle>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-accessible">
                     Projects tailored to boost your weakest skills
                   </p>
                 </CardHeader>
@@ -220,27 +222,27 @@ export function SkillGraph() {
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: index * 0.1 }}
                         viewport={{ once: true }}
-                        className="p-3 rounded-lg bg-gradient-primary/5 border border-primary/20 hover:border-primary/40 transition-colors cursor-pointer group"
+                        className="p-4 rounded-lg bg-gradient-to-r from-orange-500/10 via-purple-500/10 to-blue-500/10 backdrop-blur-sm border border-gradient-to-r border-orange-400/20 hover:from-orange-500/20 hover:via-purple-500/20 hover:to-blue-500/20 hover:border-orange-400/40 hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-300 cursor-pointer group"
                       >
                         <div className="flex items-start justify-between mb-2">
                           <div>
-                            <div className="font-semibold text-sm group-hover:text-primary transition-colors">
+                            <div className="font-semibold text-sm text-medium-contrast group-hover:text-high-contrast transition-colors">
                               {rec.project}
                             </div>
-                            <div className="text-xs text-muted-foreground">
-                              Focus: {rec.skill}
+                            <div className="text-xs text-accessible group-hover:text-medium-contrast transition-colors">
+                              Focus: <span className="text-orange-300 font-medium text-shadow-light">{rec.skill}</span>
                             </div>
                           </div>
                           <div className="text-right">
-                            <Badge variant="default" className="text-xs">
+                            <Badge variant="default" className="text-xs bg-gradient-to-r from-orange-500/30 to-purple-500/30 border-orange-400/30 text-high-contrast hover:from-orange-500/40 hover:to-purple-500/40 transition-all">
                               {rec.xpGain}
                             </Badge>
-                            <div className="text-xs text-muted-foreground mt-1">
+                            <div className="text-xs text-accessible mt-1 group-hover:text-medium-contrast transition-colors">
                               {rec.difficulty}
                             </div>
                           </div>
                         </div>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-xs text-accessible group-hover:text-medium-contrast transition-colors">
                           {rec.description}
                         </p>
                       </motion.div>

@@ -19,10 +19,10 @@ const buttonVariants = cva(
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
-        glass: "glass-button text-white hover:scale-105 focus-visible:ring-white/30 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
-        "glass-primary": "glass-button-primary text-white hover:scale-105 focus-visible:ring-blue-400/50 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent glow-blue",
-        "glass-secondary": "bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-md border border-purple-400/30 text-white hover:from-purple-500/30 hover:to-pink-500/30 hover:border-purple-400/50 hover:scale-105 hover:shadow-[0_0_20px_rgba(139,92,246,0.4)] focus-visible:ring-purple-400/50 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent transition-all duration-300",
-        "outline-neon": "border-2 border-primary/50 bg-primary/10 backdrop-blur-sm text-primary hover:bg-primary/20 hover:border-primary hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:scale-105 focus-visible:ring-primary/50 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent transition-all duration-300",
+        glass: "glass-button text-high-contrast hover:scale-105 glass-focus transition-all duration-300",
+        "glass-primary": "glass-button-primary text-high-contrast hover:scale-105 glass-focus glow-blue transition-all duration-300",
+        "glass-secondary": "bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-md border-2 border-purple-400/30 text-high-contrast hover:from-purple-500/30 hover:to-pink-500/30 hover:border-purple-400/50 hover:scale-105 hover:shadow-[0_0_20px_rgba(139,92,246,0.4)] glass-focus-secondary transition-all duration-300",
+        "outline-neon": "border-2 border-primary/50 bg-primary/10 backdrop-blur-sm text-medium-contrast hover:bg-primary/20 hover:border-primary hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:scale-105 glass-focus transition-all duration-300",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
