@@ -251,7 +251,7 @@ export default function ContributionsPage() {
       <div className="relative z-10">
         <Navbar />
         
-        <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <main className="container mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12">
           {/* Page Header */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}

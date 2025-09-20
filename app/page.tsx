@@ -23,11 +23,13 @@ export default function Home() {
       {/* Content */}
       <div className="relative z-10">
         <Navbar />
-        <Hero />
-        <ProjectDiscovery/>
-        <RewardsBounties/>
-        <SkillGraph/>
-        {/* <Leaderboard/> */}
+        <div className="pt-16">
+          <Hero />
+          <ProjectDiscovery/>
+          <RewardsBounties/>
+          <SkillGraph/>
+          {/* <Leaderboard/> */}
+        </div>
       </div>
     </div>
   );
