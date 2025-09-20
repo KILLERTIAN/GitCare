@@ -269,7 +269,7 @@ export function RewardsBounties() {
           viewport={{ once: true }}
           className="text-center mt-12"
         >
-          <Button variant="hero" size="lg">
+          <Button variant="glass-primary" size="lg">
             View All Bounties
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
