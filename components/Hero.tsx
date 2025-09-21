@@ -6,9 +6,11 @@ import { motion, Variants } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Github, Zap, Target } from 'lucide-react';
 import { AnimatedBeamDemo } from './AnimatedBeamDemo';
+import { signIn, useSession } from 'next-auth/react';
 
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
+  const { data: session } = useSession();
 
   useEffect(() => {
     setMounted(true);
@@ -88,19 +90,34 @@ export default function Hero() {
               </motion.p>
 
               <motion.div variants={itemVariants} className="flex flex-wrap gap-4">
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg shadow-blue-500/25"
-                >
-                  <Github className="mr-2 h-5 w-5" />
-                  Start Building
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+                {!session ? (
+                  <Button
+                    onClick={() => signIn('github')}
+                    size="lg"
+                    className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg shadow-blue-500/25"
+                  >
+                    <Github className="mr-2 h-5 w-5" />
+                    Start Building
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                ) : (
+                  <div className="flex flex-col gap-3">
+                    
+                    <Button
+                      onClick={() => window.location.href = '/dashboard'}
+                      size="lg"
+                      className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg shadow-green-500/25"
+                    >
+                      Go to Dashboard
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  </div>
+                )}
 
                 <Button
                   variant="outline"
                   size="lg"
-                  className="border-white/20 bg-white/5 hover:bg-white/10 text-white px-8 py-3 rounded-full text-lg backdrop-blur-sm"
+                  className="border-white/20 bg-white/5 hover:bg-white text-white px-8 py-3 rounded-full text-lg backdrop-blur-sm"
                 >
                   <Target className="mr-2 h-5 w-5" />
                   Explore Bounties

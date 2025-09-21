@@ -62,7 +62,7 @@ const generateContributionData = (year: number): ContributionDay[] => {
     return x - Math.floor(x);
   };
   
-  let currentDate = new Date(baseDate);
+  const currentDate = new Date(baseDate);
   let dayCounter = 0;
   
   while (currentDate <= endDate) {

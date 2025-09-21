@@ -1,7 +1,7 @@
 // components/navbar.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import {
@@ -15,103 +15,39 @@ import {
   SheetContent,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { Menu, X, Wallet, Mountain } from 'lucide-react';
+import { Menu, X, Github } from 'lucide-react';
 import Image from 'next/image';
+import { useSession, signIn, signOut } from 'next-auth/react';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [walletAddress, setWalletAddress] = useState<string | null>(null);
-  const [isConnecting, setIsConnecting] = useState(false);
+  const { data: session } = useSession();
 
 
 
   const navigationItems = [
     { name: 'Dashboard', href: '/dashboard' },
-    { name: 'Contributions', href: '/contributions' },
+    { name: 'Bounties', href: '/bounties' },
+    { name: 'Reputation', href: '/reputation' },
     { name: 'Leaderboard', href: '/leaderboard' },
     { name: 'Analytics', href: '/analytics' },
   ];
 
-  // Core Wallet Connection for Avalanche Fuji
-  const connectWallet = async () => {
-    if (typeof window === 'undefined') return;
-    
-    setIsConnecting(true);
-    try {
-      // Check if Core Wallet is installed
-      if (typeof window.ethereum !== 'undefined') {
-        // Request account access
-        const accounts = await window.ethereum.request({
-          method: 'eth_requestAccounts',
-        });
-
-        // Switch to Avalanche Fuji Testnet
-        try {
-          await window.ethereum.request({
-            method: 'wallet_switchEthereumChain',
-            params: [{ chainId: '0xA869' }], // Fuji testnet chain ID
-          });
-        } catch (switchError: unknown) {
-          // If the chain doesn't exist, add it
-          if ((switchError as { code?: number }).code === 4902) {
-            await window.ethereum.request({
-              method: 'wallet_addEthereumChain',
-              params: [
-                {
-                  chainId: '0xA869',
-                  chainName: 'Avalanche Fuji Testnet',
-                  nativeCurrency: {
-                    name: 'AVAX',
-                    symbol: 'AVAX',
-                    decimals: 18,
-                  },
-                  rpcUrls: ['https://api.avax-test.network/ext/bc/C/rpc'],
-                  blockExplorerUrls: ['https://testnet.snowtrace.io/'],
-                },
-              ],
-            });
-          }
-        }
-
-        setWalletAddress(accounts[0]);
-        localStorage.setItem('walletAddress', accounts[0]);
-      } else {
-        alert('Please install Core Wallet to connect');
-      }
-    } catch (error) {
-      console.error('Failed to connect wallet:', error);
-    } finally {
-      setIsConnecting(false);
-    }
-  };
-
-  const disconnectWallet = () => {
-    setWalletAddress(null);
-    localStorage.removeItem('walletAddress');
-  };
-
-  // Check for existing wallet connection
-  useEffect(() => {
-    const savedAddress = localStorage.getItem('walletAddress');
-    if (savedAddress && typeof window.ethereum !== 'undefined') {
-      setWalletAddress(savedAddress);
-    }
-  }, []);
-
-  const formatAddress = (address: string) => {
-    return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  const formatUsername = (username: string) => {
+    return username.length > 12 ? `${username.slice(0, 12)}...` : username;
   };
 
   return (
    <nav className="sticky top-0 z-50 w-full glass-nav shadow-lg shadow-black/10">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
+    
           {/* Logo */}
           <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-2 group transition-all duration-300 hover:scale-105">
-           <Image src="/gitcare-logo.png" width={30} height={30} alt='logo' className="transition-transform duration-300 group-hover:rotate-12"></Image>
+            <Link href="/" className="flex items-center space-x-2">
+           <Image src="/gitcare-logo.png" width={30} height={30} alt='logo'></Image>
 
-              <span className="font-bold text-xl bg-gradient-to-r from-blue-400 via-purple-400 to-orange-400 bg-clip-text text-transparent text-shadow-medium transition-all duration-300 group-hover:from-blue-300 group-hover:via-purple-300 group-hover:to-orange-300">
+              <span className="font-bold text-xl bg-gradient-to-r from-blue-400 via-purple-400 to-orange-400 bg-clip-text text-transparent">
                 GitCare
               </span>
             </Link>
@@ -142,32 +78,31 @@ export default function Navbar() {
 
           {/* Right side actions */}
           <div className="flex items-center space-x-3">
-            {/* Wallet Connection */}
-            {walletAddress ? (
+            {/* GitHub Authentication */}
+            {session ? (
               <div className="hidden sm:flex items-center space-x-2">
                 <div className="flex items-center space-x-2 px-3 py-2 rounded-full glass-base border-white/30 hover:bg-white/15 hover:border-white/40 transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/20 glass-focus">
-                  <Mountain className="h-4 w-4 text-orange-400 drop-shadow-sm" />
+                  <Github className="h-4 w-4 text-orange-400 drop-shadow-sm" />
                   <span className="text-sm font-medium text-high-contrast">
-                    {formatAddress(walletAddress)}
+                    {formatUsername(session.user?.login || session.user?.name || 'User')}
                   </span>
                 </div>
                 <Button
-                  onClick={disconnectWallet}
+                  onClick={() => signOut()}
                   variant="outline"
                   size="sm"
                   className="rounded-full border-red-400/40 bg-red-500/15 hover:bg-red-500/25 text-red-300 hover:text-red-200 backdrop-blur-sm transition-all duration-300 hover:border-red-400/60 hover:shadow-lg hover:shadow-red-500/20"
                 >
-                  Disconnect
+                  Sign Out
                 </Button>
               </div>
             ) : (
               <Button
-                onClick={connectWallet}
-                disabled={isConnecting}
-                className="hidden sm:flex glass-button-primary text-white border-0 rounded-full px-6 py-2 font-medium transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                onClick={() => signIn('github')}
+                className="hidden sm:flex glass-button-primary text-white border-0 rounded-full px-6 py-2 font-medium transition-all duration-300 hover:scale-105"
               >
-                <Wallet className="h-4 w-4 mr-2" />
-                {isConnecting ? 'Connecting...' : 'Connect Core'}
+                <Github className="h-4 w-4 mr-2" />
+                Sign In
               </Button>
             )}
 
@@ -220,29 +155,28 @@ export default function Navbar() {
                     ))}
                   </nav>
                   <div className="p-4 border-t border-white/20 space-y-3">
-                    {walletAddress ? (
+                    {session ? (
                       <div className="space-y-3">
                         <div className="flex items-center space-x-2 px-3 py-2 rounded-full glass-base border-white/30 hover:bg-white/15 hover:border-white/40 transition-all duration-300 glass-focus">
-                          <Mountain className="h-4 w-4 text-orange-400 drop-shadow-sm" />
+                          <Github className="h-4 w-4 text-orange-400 drop-shadow-sm" />
                           <span className="text-sm font-medium text-high-contrast">
-                            {formatAddress(walletAddress)}
+                            {formatUsername(session.user?.login || session.user?.name || 'User')}
                           </span>
                         </div>
                         <Button
-                          onClick={disconnectWallet}
+                          onClick={() => signOut()}
                           className="w-full rounded-xl bg-red-500/15 hover:bg-red-500/25 text-red-300 hover:text-red-200 border border-red-400/40 hover:border-red-400/60 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:shadow-red-500/20"
                         >
-                          Disconnect Wallet
+                          Sign Out
                         </Button>
                       </div>
                     ) : (
                       <Button
-                        onClick={connectWallet}
-                        disabled={isConnecting}
-                        className="w-full glass-button-primary rounded-xl text-white font-medium transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                        onClick={() => signIn('github')}
+                        className="w-full glass-button-primary rounded-xl text-white font-medium transition-all duration-300 hover:scale-105"
                       >
-                        <Wallet className="h-4 w-4 mr-2" />
-                        {isConnecting ? 'Connecting...' : 'Connect Core Wallet'}
+                        <Github className="h-4 w-4 mr-2" />
+                        Sign In with GitHub
                       </Button>
                     )}
                   </div>

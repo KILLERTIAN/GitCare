@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Trophy, Medal, Award, Crown, Zap, GitCommit } from "lucide-react";
@@ -7,106 +8,92 @@ import { Trophy, Medal, Award, Crown, Zap, GitCommit } from "lucide-react";
 const getAvatarUrl = (name: string, seed: number) => 
   `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&size=128&background=random&color=fff&format=png&rounded=true&seed=${seed}`;
 
-const topContributors = [
+interface LeaderboardUser {
+  rank: number;
+  name: string;
+  githubUsername: string;
+  avatar: string;
+  level: number;
+  earnings: string;
+  speciality: string;
+  streak: number;
+  badge: string;
+  reputation: number;
+  contributions: number;
+  xp: number;
+}
+
+// Mock data for demonstration
+const mockUsers: LeaderboardUser[] = [
   {
     rank: 1,
     name: "Alex Chen",
+    githubUsername: "alexchen",
     avatar: getAvatarUrl("Alex Chen", 1),
-    xp: 15420,
-    level: 31,
+    level: 15,
+    earnings: "$2,450",
+    speciality: "Full Stack",
+    streak: 42,
+    badge: "Legend",
+    reputation: 1500,
     contributions: 89,
-    earnings: "45.2 AVAX",
-    speciality: "Blockchain",
-    streak: 28,
-    badge: "Quantum Coder"
+    xp: 15000
   },
   {
     rank: 2,
-    name: "Maya Patel",
-    avatar: getAvatarUrl("Maya Patel", 2),
-    xp: 13850,
-    level: 28,
-    contributions: 76,
-    earnings: "38.7 AVAX",
-    speciality: "AI/ML",
-    streak: 21,
-    badge: "Neural Architect"
+    name: "Sarah Kim",
+    githubUsername: "sarahkim",
+    avatar: getAvatarUrl("Sarah Kim", 2),
+    level: 12,
+    earnings: "$1,890",
+    speciality: "Frontend",
+    streak: 28,
+    badge: "Master",
+    reputation: 1200,
+    contributions: 67,
+    xp: 12000
   },
   {
     rank: 3,
-    name: "Jordan Kim",
-    avatar: getAvatarUrl("Jordan Kim", 3),
-    xp: 12940,
-    level: 26,
-    contributions: 68,
-    earnings: "32.1 AVAX",
-    speciality: "Frontend",
-    streak: 15,
-    badge: "UI Wizard"
-  }
-];
-
-const leaderboardData = [
-  ...topContributors,
+    name: "Mike Johnson",
+    githubUsername: "mikej",
+    avatar: getAvatarUrl("Mike Johnson", 3),
+    level: 10,
+    earnings: "$1,340",
+    speciality: "Backend",
+    streak: 21,
+    badge: "Expert",
+    reputation: 1000,
+    contributions: 54,
+    xp: 10000
+  },
   {
     rank: 4,
-    name: "Sarah Wilson",
-    avatar: getAvatarUrl("Sarah Wilson", 4),
-    xp: 11200,
-    level: 23,
-    contributions: 54,
-    earnings: "28.5 AVAX",
+    name: "Emma Davis",
+    githubUsername: "emmad",
+    avatar: getAvatarUrl("Emma Davis", 4),
+    level: 8,
+    earnings: "$980",
     speciality: "DevOps",
-    streak: 12,
-    badge: "Cloud Master"
+    streak: 15,
+    badge: "Veteran",
+    reputation: 800,
+    contributions: 43,
+    xp: 8000
   },
   {
     rank: 5,
-    name: "David Rodriguez",
-    avatar: getAvatarUrl("David Rodriguez", 5),
-    xp: 10850,
-    level: 22,
-    contributions: 47,
-    earnings: "25.3 AVAX",
-    speciality: "Security",
-    streak: 18,
-    badge: "Crypto Guardian"
-  },
-  {
-    rank: 6,
-    name: "Lisa Zhang",
-    avatar: getAvatarUrl("Lisa Zhang", 6),
-    xp: 9650,
-    level: 20,
-    contributions: 42,
-    earnings: "22.1 AVAX",
+    name: "David Wilson",
+    githubUsername: "davidw",
+    avatar: getAvatarUrl("David Wilson", 5),
+    level: 7,
+    earnings: "$720",
     speciality: "Mobile",
-    streak: 9,
-    badge: "App Innovator"
-  },
-  {
-    rank: 7,
-    name: "Mike Johnson",
-    avatar: getAvatarUrl("Mike Johnson", 7),
-    xp: 8940,
-    level: 18,
+    streak: 12,
+    badge: "Contributor",
+    reputation: 700,
     contributions: 38,
-    earnings: "19.7 AVAX",
-    speciality: "Backend",
-    streak: 14,
-    badge: "API Architect"
-  },
-  {
-    rank: 8,
-    name: "Emma Thompson",
-    avatar: getAvatarUrl("Emma Thompson", 8),
-    xp: 8320,
-    level: 17,
-    contributions: 35,
-    earnings: "17.4 AVAX",
-    speciality: "Design",
-    streak: 6,
-    badge: "UX Pioneer"
+    xp: 7000
   }
 ];
 
@@ -118,6 +105,42 @@ const RankIcon = ({ rank }: { rank: number }) => {
 };
 
 export function Leaderboard() {
+  const [topUsers, setTopUsers] = useState<LeaderboardUser[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading delay
+    const timer = setTimeout(() => {
+      setTopUsers(mockUsers);
+      setLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="py-20 relative">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl lg:text-5xl font-bold mb-4 gradient-text text-shadow-medium">
+              Global Leaderboard
+            </h2>
+            <p className="text-xl text-accessible max-w-2xl mx-auto">
+              Loading top contributors...
+            </p>
+          </div>
+          <div className="animate-pulse space-y-4">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="h-16 bg-white/10 rounded-lg"></div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  const topContributors = topUsers.slice(0, 3);
   return (
     <section className="py-20 relative">
       <div className="container mx-auto px-6">
@@ -273,7 +296,7 @@ export function Leaderboard() {
             </CardHeader>
             <CardContent className="p-0">
               <div className="space-y-1">
-                {leaderboardData.map((contributor, index) => {
+                {topUsers.map((contributor, index) => {
                   const isTopThree = contributor.rank <= 3;
                   const rankColors = {
                     1: 'from-yellow-400/15 to-orange-500/10 border-yellow-400/30 hover:border-yellow-400/50',
@@ -332,10 +355,10 @@ export function Leaderboard() {
                           <div className={`font-semibold transition-colors duration-300 ${
                             isTopThree ? 'text-high-contrast' : 'text-medium-contrast group-hover:text-high-contrast'
                           }`}>
-                            {contributor.name}
+                            {contributor.githubUsername || `${contributor.address.slice(0, 6)}...${contributor.address.slice(-4)}`}
                           </div>
-                          <div className="text-xs text-accessible group-hover:text-medium-contrast transition-colors duration-300">
-                            {contributor.speciality} • {contributor.streak} day streak
+                          <div className="text-xs text-accessible group-hover:text-medium-contrast transition-colors duration-300 flex items-center gap-2">
+                            <span>{contributor.speciality} • {contributor.streak} day streak</span>
                           </div>
                         </div>
                       </div>
@@ -359,10 +382,10 @@ export function Leaderboard() {
                         <div className="text-center">
                           <div className="flex items-center gap-1 text-medium-contrast group-hover:text-high-contrast transition-colors duration-300">
                             <GitCommit className="h-4 w-4" />
-                            <span className="font-semibold">{contributor.contributions}</span>
+                            <span className="font-semibold">{contributor.reputation.toString()}</span>
                           </div>
                           <div className="text-xs text-accessible group-hover:text-medium-contrast transition-colors duration-300">
-                            contributions
+                            reputation
                           </div>
                         </div>
                         
