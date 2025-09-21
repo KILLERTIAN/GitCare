@@ -19,17 +19,14 @@ export default function Home() {
       <div className="fixed inset-0 z-0">
         <DarkVeil />
       </div>
-      
+
       {/* Content */}
       <div className="relative z-10">
         <Navbar />
-        <div className="pt-16">
-          <Hero />
-          <ProjectDiscovery/>
-          <RewardsBounties/>
-          <SkillGraph/>
-          {/* <Leaderboard/> */}
-        </div>
+        <Hero />
+        <ProjectDiscovery />
+        <RewardsBounties />
+        <SkillGraph />
       </div>
     </div>
   );
