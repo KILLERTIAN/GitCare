@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 
 import Navbar from "@/components/Navbar";
-import { ArcTimeline, ArcTimelineItem } from "@/components/magicui/arc-timeline";
+import { AdvancedTimeline } from "@/components/magicui/advanced-timeline";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from '@/components/ui/button';
@@ -125,89 +125,57 @@ const topRepositories = [
   }
 ];
 
-// Timeline data for ArcTimeline
-const TIMELINE_DATA: ArcTimelineItem[] = [
+// Timeline data for AdvancedTimeline
+// Sample events for the advanced timeline
+const timelineEvents = [
   {
-    time: "2023 Q4",
-    steps: [
-      {
-        icon: <Rocket width={20} height={20} />,
-        content: "Started contributing to Avalanche ecosystem with first smart contract deployment.",
-      },
-      {
-        icon: <Box width={20} height={20} />,
-        content: "Developed first DeFi protocol prototype earning 5.2 AVAX in bounties.",
-      },
-    ],
+    title: "Smart Contract Deployed",
+    description: "First major contribution to Avalanche ecosystem",
+    date: "2023-12-15",
+    category: "commit",
+    reward: 2.5,
+    impact: 15
   },
   {
-    time: "2024 Q1",
-    steps: [
-      {
-        icon: <Lock width={20} height={20} />,
-        content: "Completed security audit for major lending protocol, discovered 3 critical vulnerabilities.",
-      },
-      {
-        icon: <Globe width={20} height={20} />,
-        content: "Contributed to cross-chain bridge implementation, enabling multi-blockchain support.",
-      },
-      {
-        icon: <Settings width={20} height={20} />,
-        content: "Optimized consensus mechanism, improving network throughput by 25%.",
-      },
-    ],
+    title: "DeFi Protocol Launch",
+    description: "Launched yield farming protocol with 50M+ TVL",
+    date: "2024-01-20",
+    category: "milestone",
+    reward: 8.5,
+    impact: 75
   },
   {
-    time: "2024 Q2",
-    steps: [
-      {
-        icon: <Rocket width={20} height={20} />,
-        content: "Launched open-source NFT marketplace with advanced royalty system.",
-      },
-      {
-        icon: <Globe width={20} height={20} />,
-        content: "Partnered with 5 major DeFi protocols to integrate yield farming mechanisms.",
-      },
-      {
-        icon: <Wand2 width={20} height={20} />,
-        content: "Developed AI-powered smart contract analyzer for automated vulnerability detection.",
-      },
-    ],
+    title: "Security Audit Completed",
+    description: "Found critical vulnerabilities in lending protocol",
+    date: "2024-03-08",
+    category: "review",
+    reward: 12.0,
+    impact: 90
   },
   {
-    time: "2024 Q3",
-    steps: [
-      {
-        icon: <Star width={20} height={20} />,
-        content: "Achieved top 1% contributor status in Avalanche ecosystem with 2500+ commits.",
-      },
-      {
-        icon: <Bolt width={20} height={20} />,
-        content: "Implemented lightning-fast transaction processing, reducing gas fees by 40%.",
-      },
-      {
-        icon: <Rocket width={20} height={20} />,
-        content: "Mentored 50+ new developers in Web3 development through community programs.",
-      },
-    ],
+    title: "Cross-Chain Integration",
+    description: "Built bridge for multi-blockchain support",
+    date: "2024-05-15",
+    category: "commit",
+    reward: 6.7,
+    impact: 60
   },
   {
-    time: "2024 Q4",
-    steps: [
-      {
-        icon: <Settings width={20} height={20} />,
-        content: "Leading development of next-generation consensus algorithm for Avalanche 2.0.",
-      },
-      {
-        icon: <Star width={20} height={20} />,
-        content: "Earned 'Distinguished Contributor' badge with over 45 AVAX in total rewards.",
-      },
-      {
-        icon: <Box width={20} height={20} />,
-        content: "Building revolutionary DeFi infrastructure for institutional adoption.",
-      },
-    ],
+    title: "AI Security Tool",
+    description: "Developed automated vulnerability detection",
+    date: "2024-07-22",
+    category: "bounty",
+    reward: 15.3,
+    impact: 95
   },
+  {
+    title: "Elite Status Achieved",
+    description: "Top 1% contributor recognition",
+    date: "2024-09-10",
+    category: "milestone",
+    reward: 20.0,
+    impact: 100
+  }
 ];
 
 export default function ContributionsPage() {
@@ -352,11 +320,7 @@ export default function ContributionsPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-6">
-                <ArcTimeline
-                  data={TIMELINE_DATA}
-                  defaultActiveStep={{ time: "2024 Q4", stepIndex: 0 }}
-                  className="text-white"
-                />
+                <AdvancedTimeline data={[]} />
               </CardContent>
             </Card>
           </motion.div>
