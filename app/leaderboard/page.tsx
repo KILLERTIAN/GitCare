@@ -23,6 +23,12 @@ const DarkVeil = dynamic(() => import("@/components/DarkVeil"), {
   ssr: false,
 });
 
+// Generate AI avatar URL based on username
+const generateAvatarUrl = (name: string, seed?: string) => {
+  const seedValue = seed || name.toLowerCase().replace(/\s+/g, '');
+  return `https://api.dicebear.com/7.x/avataaars/svg?seed=${seedValue}&backgroundColor=1e293b,334155,475569&clothesColor=262e49,65c3f7,f9ca24&eyeColor=brown,blue,green&hairColor=724133,d2691e,cc9966&skinColor=fdbcb4,edb98a,fd9841`;
+};
+
 // Mock leaderboard data
 const topContributors = [
   {
@@ -31,7 +37,7 @@ const topContributors = [
     previousRank: 1,
     name: 'Alice Chen',
     username: 'alice_dev',
-    avatar: '/api/placeholder/40/40',
+    avatar: generateAvatarUrl('Alice Chen', 'alice'),
     location: 'San Francisco, CA',
     totalEarnings: 156.8,
     monthlyEarnings: 23.4,
@@ -56,7 +62,7 @@ const topContributors = [
     previousRank: 3,
     name: 'Marcus Rodriguez',
     username: 'marcus_crypto',
-    avatar: '/api/placeholder/40/40',
+    avatar: generateAvatarUrl('Marcus Rodriguez', 'marcus'),
     location: 'New York, NY',
     totalEarnings: 142.3,
     monthlyEarnings: 19.8,
@@ -80,7 +86,7 @@ const topContributors = [
     previousRank: 2,
     name: 'Sarah Kim',
     username: 'sarah_blockchain',
-    avatar: '/api/placeholder/40/40',
+    avatar: generateAvatarUrl('Sarah Kim', 'sarah'),
     location: 'Seoul, South Korea',
     totalEarnings: 138.9,
     monthlyEarnings: 21.2,
@@ -105,7 +111,7 @@ const topContributors = [
     previousRank: i + Math.floor(Math.random() * 3) + 2,
     name: `Developer ${i + 4}`,
     username: `dev_${i + 4}`,
-    avatar: '/api/placeholder/40/40',
+    avatar: generateAvatarUrl(`Developer ${i + 4}`, `dev${i + 4}`),
     location: ['London, UK', 'Berlin, Germany', 'Tokyo, Japan', 'Toronto, Canada', 'Sydney, Australia'][i % 5],
     totalEarnings: Math.round((135 - i * 5) * 10) / 10,
     monthlyEarnings: Math.round((20 - i * 0.5) * 10) / 10,
@@ -286,26 +292,28 @@ export default function LeaderboardPage() {
               transition={{ duration: 0.8, delay: 0.8 }}
               className="md:order-1"
             >
-              <Card className="glass-card border-white/20 text-center relative overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-gray-400 to-gray-300" />
-                <CardContent className="pt-8 pb-6">
+              <Card className="glass-card border-silver-400/40 bg-gradient-to-br from-slate-800/60 to-slate-900/80 text-center relative overflow-hidden shadow-2xl">
+                <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-slate-400 via-gray-300 to-slate-400" />
+                <div className="absolute inset-0 bg-gradient-to-br from-slate-500/10 to-transparent" />
+                <CardContent className="pt-8 pb-6 relative z-10">
                   <div className="flex justify-center mb-4">
                     <div className="relative">
+                      <div className="absolute inset-0 bg-gradient-to-br from-slate-400/30 to-slate-600/30 rounded-full blur-lg"></div>
                       <img
                         src={topContributors[1]?.avatar}
                         alt={topContributors[1]?.name}
-                        className="w-20 h-20 rounded-full border-4 border-gray-300"
+                        className="w-20 h-20 rounded-full border-4 border-slate-300 shadow-2xl relative z-10 bg-white"
                       />
-                      <div className="absolute -top-2 -right-2 p-2 bg-gray-300 rounded-full">
-                        <Medal className="h-4 w-4 text-gray-700" />
+                      <div className="absolute -top-2 -right-2 p-2 bg-gradient-to-br from-slate-300 to-slate-400 rounded-full shadow-xl">
+                        <Medal className="h-4 w-4 text-slate-700" />
                       </div>
                     </div>
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-1">{topContributors[1]?.name}</h3>
-                  <p className="text-gray-400 text-sm mb-3">@{topContributors[1]?.username}</p>
+                  <h3 className="text-xl font-bold text-white mb-1 drop-shadow-lg">{topContributors[1]?.name}</h3>
+                  <p className="text-slate-300 text-sm mb-3 font-medium">@{topContributors[1]?.username}</p>
                   <div className="space-y-2">
-                    <div className="text-2xl font-bold text-gray-300">{topContributors[1]?.totalEarnings} AVAX</div>
-                    <div className="text-sm text-gray-400">{topContributors[1]?.contributions} contributions</div>
+                    <div className="text-2xl font-bold text-slate-100 drop-shadow-md">{topContributors[1]?.totalEarnings} AVAX</div>
+                    <div className="text-sm text-slate-300 font-medium">{topContributors[1]?.contributions} contributions</div>
                   </div>
                 </CardContent>
               </Card>
@@ -350,26 +358,28 @@ export default function LeaderboardPage() {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="md:order-3"
             >
-              <Card className="glass-card border-white/20 text-center relative overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-600 to-amber-500" />
-                <CardContent className="pt-8 pb-6">
+              <Card className="glass-card border-amber-400/40 bg-gradient-to-br from-amber-900/40 to-orange-900/60 text-center relative overflow-hidden shadow-2xl">
+                <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-amber-600 via-orange-500 to-amber-600" />
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent" />
+                <CardContent className="pt-8 pb-6 relative z-10">
                   <div className="flex justify-center mb-4">
                     <div className="relative">
+                      <div className="absolute inset-0 bg-gradient-to-br from-amber-400/30 to-orange-500/30 rounded-full blur-lg"></div>
                       <img
                         src={topContributors[2]?.avatar}
                         alt={topContributors[2]?.name}
-                        className="w-20 h-20 rounded-full border-4 border-amber-600"
+                        className="w-20 h-20 rounded-full border-4 border-amber-400 shadow-2xl relative z-10 bg-white"
                       />
-                      <div className="absolute -top-2 -right-2 p-2 bg-amber-600 rounded-full">
+                      <div className="absolute -top-2 -right-2 p-2 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full shadow-xl">
                         <Medal className="h-4 w-4 text-amber-100" />
                       </div>
                     </div>
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-1">{topContributors[2]?.name}</h3>
-                  <p className="text-gray-400 text-sm mb-3">@{topContributors[2]?.username}</p>
+                  <h3 className="text-xl font-bold text-white mb-1 drop-shadow-lg">{topContributors[2]?.name}</h3>
+                  <p className="text-amber-200 text-sm mb-3 font-medium">@{topContributors[2]?.username}</p>
                   <div className="space-y-2">
-                    <div className="text-2xl font-bold text-amber-600">{topContributors[2]?.totalEarnings} AVAX</div>
-                    <div className="text-sm text-gray-400">{topContributors[2]?.contributions} contributions</div>
+                    <div className="text-2xl font-bold text-amber-300 drop-shadow-md">{topContributors[2]?.totalEarnings} AVAX</div>
+                    <div className="text-sm text-amber-200 font-medium">{topContributors[2]?.contributions} contributions</div>
                   </div>
                 </CardContent>
               </Card>
@@ -403,7 +413,7 @@ export default function LeaderboardPage() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4, delay: index * 0.05 }}
-                        className="glass-base p-4 rounded-lg border border-white/5 hover:border-white/10 transition-colors"
+                        className="glass-card border-white/10 hover:border-white/20 p-4 rounded-lg transition-all duration-300 hover:shadow-xl backdrop-blur-md bg-gradient-to-r from-slate-800/40 to-slate-900/60"
                       >
                         <div className="flex items-center gap-4">
                           {/* Rank */}
@@ -423,19 +433,22 @@ export default function LeaderboardPage() {
                           </div>
 
                           {/* Avatar */}
-                          <img
-                            src={contributor.avatar}
-                            alt={contributor.name}
-                            className="w-12 h-12 rounded-full border-2 border-white/20"
-                          />
+                          <div className="relative">
+                            <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-purple-500/20 rounded-full blur-sm"></div>
+                            <img
+                              src={contributor.avatar}
+                              alt={contributor.name}
+                              className="w-12 h-12 rounded-full border-2 border-white/30 shadow-lg relative z-10 bg-white"
+                            />
+                          </div>
 
                           {/* Info */}
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1">
-                              <h4 className="text-white font-medium">{contributor.name}</h4>
-                              <span className="text-gray-400 text-sm">@{contributor.username}</span>
+                              <h4 className="text-white font-semibold drop-shadow-sm">{contributor.name}</h4>
+                              <span className="text-slate-300 text-sm font-medium">@{contributor.username}</span>
                               {contributor.location && (
-                                <span className="flex items-center gap-1 text-gray-500 text-xs">
+                                <span className="flex items-center gap-1 text-slate-400 text-xs font-medium">
                                   <MapPin className="h-3 w-3" />
                                   {contributor.location}
                                 </span>
@@ -463,38 +476,38 @@ export default function LeaderboardPage() {
 
                           {/* Stats */}
                           <div className="grid grid-cols-2 gap-4 text-center">
-                            <div>
-                              <div className="text-xl font-bold text-amber-400">{contributor.totalEarnings}</div>
-                              <div className="text-xs text-gray-400">Total AVAX</div>
+                            <div className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-lg p-2 border border-amber-400/20">
+                              <div className="text-xl font-bold text-amber-300 drop-shadow-sm">{contributor.totalEarnings}</div>
+                              <div className="text-xs text-amber-200/80 font-medium">Total AVAX</div>
                             </div>
-                            <div>
-                              <div className="text-xl font-bold text-white">{contributor.contributions}</div>
-                              <div className="text-xs text-gray-400">Contributions</div>
+                            <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-lg p-2 border border-blue-400/20">
+                              <div className="text-xl font-bold text-blue-200 drop-shadow-sm">{contributor.contributions}</div>
+                              <div className="text-xs text-blue-300/80 font-medium">Contributions</div>
                             </div>
-                            <div>
-                              <div className="text-lg font-bold text-blue-400">{contributor.pullRequests}</div>
-                              <div className="text-xs text-gray-400">Pull Requests</div>
+                            <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-lg p-2 border border-purple-400/20">
+                              <div className="text-lg font-bold text-purple-200 drop-shadow-sm">{contributor.pullRequests}</div>
+                              <div className="text-xs text-purple-300/80 font-medium">Pull Requests</div>
                             </div>
-                            <div>
-                              <div className="text-lg font-bold text-green-400">{contributor.codeReviews}</div>
-                              <div className="text-xs text-gray-400">Reviews</div>
+                            <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-lg p-2 border border-green-400/20">
+                              <div className="text-lg font-bold text-green-200 drop-shadow-sm">{contributor.codeReviews}</div>
+                              <div className="text-xs text-green-300/80 font-medium">Reviews</div>
                             </div>
                           </div>
 
                           {/* Social Links */}
                           <div className="flex items-center gap-2">
                             {contributor.socialLinks.github && (
-                              <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
+                              <Button size="sm" variant="ghost" className="h-8 w-8 p-0 hover:bg-white/10 text-slate-300 hover:text-white transition-colors">
                                 <Github className="h-4 w-4" />
                               </Button>
                             )}
                             {'twitter' in contributor.socialLinks && contributor.socialLinks.twitter && (
-                              <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
+                              <Button size="sm" variant="ghost" className="h-8 w-8 p-0 hover:bg-blue-500/10 text-slate-300 hover:text-blue-400 transition-colors">
                                 <Twitter className="h-4 w-4" />
                               </Button>
                             )}
                             {'website' in contributor.socialLinks && contributor.socialLinks.website && (
-                              <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
+                              <Button size="sm" variant="ghost" className="h-8 w-8 p-0 hover:bg-purple-500/10 text-slate-300 hover:text-purple-400 transition-colors">
                                 <Globe className="h-4 w-4" />
                               </Button>
                             )}
