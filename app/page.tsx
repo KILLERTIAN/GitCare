@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic';
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import Footer from "@/components/Footer";
 import { ProjectDiscovery } from '@/components/section/ProjectDiscovery';
 import { RewardsBounties } from '@/components/section/RewardsBounties';
 import { SkillGraph } from '@/components/section/SkillGraph';
@@ -27,6 +28,7 @@ export default function Home() {
         <ProjectDiscovery />
         <RewardsBounties />
         <SkillGraph />
+        <Footer />
       </div>
     </div>
   );

@@ -185,6 +185,28 @@
   }
 }
 
+/* Gradient Animation Keyframes */
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Fallback for browsers that don't support background-clip: text */
+@supports not (background-clip: text) {
+  .gradient-text,
+  .gradient-text-blue-purple,
+  .gradient-text-purple-pink,
+  .gradient-text-orange-red {
+    background: none !important;
+    color: white !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9) !important;
+  }
+}
+
 /* Glassmorphism Utility Classes */
 @layer utilities {
   /* Base glassmorphism effects */
@@ -859,5 +881,48 @@
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
     }
+  }
+
+  /* Gradient Text Classes */
+  .gradient-text {
+    background: linear-gradient(135deg, #60a5fa, #a78bfa, #f59e0b);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    text-shadow: none;
+    font-weight: 700;
+    background-size: 200% 200%;
+    animation: gradientShift 3s ease-in-out infinite;
+  }
+
+  .gradient-text-blue-purple {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    text-shadow: none;
+    font-weight: 600;
+  }
+
+  .gradient-text-purple-pink {
+    background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    text-shadow: none;
+    font-weight: 600;
+  }
+
+  .gradient-text-orange-red {
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    text-shadow: none;
+    font-weight: 600;
   }
 }
