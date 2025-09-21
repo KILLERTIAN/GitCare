@@ -1,3 +1,3 @@
-export { ReputationBadge, BadgeCollection } from './ReputationBadge';
-export { ReputationChart } from './ReputationChart';
-export { ReputationDashboard } from './ReputationDashboard';
+export { default as ReputationBadge } from './ReputationBadge';
+export { default as ReputationChart } from './ReputationChart';
+export { default as ReputationDashboard } from './ReputationDashboard';

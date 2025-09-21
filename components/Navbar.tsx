@@ -38,14 +38,14 @@ export default function Navbar() {
   };
 
   return (
-   <nav className="sticky top-0 z-50 w-full glass-nav shadow-lg shadow-black/10">
+    <nav className="sticky top-0 z-50 w-full glass-nav shadow-lg shadow-black/10">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-    
+
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-           <Image src="/gitcare-logo.png" width={30} height={30} alt='logo'></Image>
+              <Image src="/gitcare-logo.png" width={30} height={30} alt='logo'></Image>
 
               <span className="font-bold text-xl bg-gradient-to-r from-blue-400 via-purple-400 to-orange-400 bg-clip-text text-transparent">
                 GitCare
@@ -60,8 +60,8 @@ export default function Navbar() {
                 {navigationItems.map((item) => (
                   <NavigationMenuItem key={item.name}>
                     <NavigationMenuLink asChild>
-                      <Link 
-                        href={item.href} 
+                      <Link
+                        href={item.href}
                         className="group inline-flex h-9 w-max items-center justify-center rounded-full px-4 py-2 text-sm font-medium text-accessible transition-all duration-300 hover:text-high-contrast hover:bg-white/10 hover:backdrop-blur-sm hover:border hover:border-white/20 hover:shadow-lg hover:shadow-blue-500/20 glass-focus active:scale-95"
                       >
                         <span className="relative">
@@ -125,8 +125,8 @@ export default function Navbar() {
               <SheetContent side="right" className="w-[300px] sm:w-[400px] glass-nav border-l border-white/20 shadow-2xl shadow-black/20">
                 <div className="flex flex-col h-full">
                   <div className="flex items-center justify-between p-4 border-b border-white/20">
-                    <Link 
-                      href="/" 
+                    <Link
+                      href="/"
                       className="flex items-center space-x-2 group transition-all duration-300 hover:scale-105"
                       onClick={() => setIsOpen(false)}
                     >
