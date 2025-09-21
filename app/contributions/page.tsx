@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { AdvancedTimeline } from "@/components/magicui/advanced-timeline";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -542,6 +543,9 @@ export default function ContributionsPage() {
             </motion.div>
           </div>
         </main>
+        
+        {/* Footer */}
+        <Footer />
       </div>
     </div>
   );
