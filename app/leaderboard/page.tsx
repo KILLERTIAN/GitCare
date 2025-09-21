@@ -1,6 +1,13 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from "framer-motion";
 import { 
@@ -10,12 +17,7 @@ import {
   MapPin, Link as LinkIcon, Github, Twitter, Globe
 } from "lucide-react";
 
-import Navbar from "@/components/Navbar";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
 
 
 // Dynamic import for the dark veil background
@@ -524,6 +526,9 @@ export default function LeaderboardPage() {
             </Card>
           </motion.div>
         </main>
+        
+        {/* Footer */}
+        <Footer />
       </div>
     </div>
   );
