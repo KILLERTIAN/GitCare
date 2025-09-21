@@ -108,6 +108,11 @@ export const AdvancedTimeline: React.FC<AdvancedTimelineProps> = ({
     defaultActiveStep || { time: data[0]?.time || "", stepIndex: 0 }
   );
   const [selectedYear, setSelectedYear] = useState(2024);
+  const [hoveredElement, setHoveredElement] = useState<{
+    type: 'node' | 'connection' | 'particle' | null;
+    position: { x: number; y: number };
+    description: string;
+  } | null>(null);
   const [selectedMonth, setSelectedMonth] = useState(11); // December
   const [viewMode, setViewMode] = useState<'timeline' | 'network'>('timeline');
   const [animationPhase, setAnimationPhase] = useState(0);
@@ -582,38 +587,150 @@ export const AdvancedTimeline: React.FC<AdvancedTimelineProps> = ({
             
             <div className="relative z-10">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-white font-semibold flex items-center gap-2">
-                  {viewMode === 'timeline' ? (
-                    <>
-                      <Sparkles className="h-5 w-5 text-purple-400" />
-                      Quantum Timeline
-                    </>
-                  ) : (
-                    <>
-                      <Activity className="h-5 w-5 text-blue-400" />
-                      Contribution Network
-                    </>
-                  )}
-                </h3>
+                <div className="flex items-center gap-3">
+                  <h3 className="text-white font-semibold flex items-center gap-2">
+                    {viewMode === 'timeline' ? (
+                      <>
+                        <Sparkles className="h-5 w-5 text-purple-400" />
+                        Quantum Timeline
+                      </>
+                    ) : (
+                      <>
+                        <Activity className="h-5 w-5 text-blue-400" />
+                        Contribution Network
+                      </>
+                    )}
+                  </h3>
+                  
+                  <div className="group relative">
+                    <button className="text-gray-400 hover:text-white transition-colors">
+                      <Shield className="h-4 w-4" />
+                    </button>
+                    
+                    {/* Briefing Tooltip */}
+                    <div className="absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-300 z-50 left-6 top-0 w-80 glass-card border border-white/20 p-4 rounded-lg backdrop-blur-md">
+                      <h4 className="text-white font-semibold mb-2 flex items-center gap-2">
+                        <Sparkles className="h-4 w-4 text-purple-400" />
+                        Quantum Timeline Briefing
+                      </h4>
+                      <p className="text-gray-300 text-sm mb-3">
+                        {viewMode === 'timeline' ? 
+                          'The Quantum Timeline visualizes your contribution journey as a neural network. Each node represents a milestone, connected by quantum entanglements showing your development path through the Avalanche ecosystem.' :
+                          'The Contribution Network displays your activity patterns as interconnected nodes, revealing collaboration clusters and project relationships across time dimensions.'
+                        }
+                      </p>
+                      <div className="space-y-2 text-xs">
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 rounded-full bg-purple-500"></div>
+                          <span className="text-gray-400">Active Neural Node</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-1 bg-blue-400"></div>
+                          <span className="text-gray-400">Quantum Connection</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 rounded-full bg-yellow-400 animate-pulse"></div>
+                          <span className="text-gray-400">Current Position</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 
                 <Badge className="text-xs bg-gradient-to-r from-purple-500 to-blue-500 text-white border-0">
                   {viewMode === 'timeline' ? 'Neural Path' : 'Node Graph'}
                 </Badge>
               </div>
               
-              {viewMode === 'timeline' ? (
-                <canvas
-                  ref={canvasRef}
-                  className="w-full h-80 rounded-lg"
-                  style={{ background: 'transparent' }}
-                />
-              ) : (
-                <canvas
-                  ref={contributionCanvasRef}
-                  className="w-full h-80 rounded-lg"
-                  style={{ background: 'transparent' }}
-                />
-              )}
+              <div className="relative">
+                {viewMode === 'timeline' ? (
+                  <canvas
+                    ref={canvasRef}
+                    className="w-full h-80 rounded-lg cursor-pointer"
+                    style={{ background: 'transparent' }}
+                    onMouseMove={(e) => {
+                      const canvas = canvasRef.current;
+                      if (!canvas) return;
+                      
+                      const rect = canvas.getBoundingClientRect();
+                      const x = e.clientX - rect.left;
+                      const y = e.clientY - rect.top;
+                      
+                      // Check if hovering over a node
+                      const centerX = canvas.width / (2 * window.devicePixelRatio);
+                      const centerY = canvas.height / (2 * window.devicePixelRatio) + 150;
+                      const radius = Math.min(canvas.width / (2 * window.devicePixelRatio) * 0.8, 400);
+                      
+                      data.forEach((item, index) => {
+                        const t = index / Math.max(data.length - 1, 1);
+                        const angle = t * 2 * Math.PI * 2;
+                        const r = radius * (0.3 + t * 0.7);
+                        const nodeX = centerX + Math.cos(angle) * r;
+                        const nodeY = centerY + Math.sin(angle) * r;
+                        
+                        const distance = Math.sqrt((x - nodeX) ** 2 + (y - nodeY) ** 2);
+                        
+                        if (distance < 15) {
+                          setHoveredElement({
+                            type: 'node',
+                            position: { x: e.clientX, y: e.clientY },
+                            description: `Neural Node: ${item.time} - Contains ${item.steps?.length || 0} quantum milestones. This node represents a significant evolution point in your development journey.`
+                          });
+                          return;
+                        }
+                      });
+                      
+                      // If not hovering over anything specific, clear hover
+                      setHoveredElement(null);
+                    }}
+                    onMouseLeave={() => setHoveredElement(null)}
+                  />
+                ) : (
+                  <canvas
+                    ref={contributionCanvasRef}
+                    className="w-full h-80 rounded-lg cursor-pointer"
+                    style={{ background: 'transparent' }}
+                    onMouseMove={(e) => {
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      const x = e.clientX - rect.left;
+                      const y = e.clientY - rect.top;
+                      
+                      // Simple hover detection for contribution network
+                      setHoveredElement({
+                        type: 'node',
+                        position: { x: e.clientX, y: e.clientY },
+                        description: `Contribution Network Node - This represents activity clusters and collaboration patterns across your project ecosystem.`
+                      });
+                    }}
+                    onMouseLeave={() => setHoveredElement(null)}
+                  />
+                )}
+                
+                {/* Interactive Tooltip */}
+                {hoveredElement && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    className="fixed z-50 glass-card border border-white/20 p-3 rounded-lg max-w-xs backdrop-blur-md pointer-events-none"
+                    style={{
+                      left: hoveredElement.position.x + 10,
+                      top: hoveredElement.position.y - 10,
+                      transform: 'translateY(-100%)'
+                    }}
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      {hoveredElement.type === 'node' && <Sparkles className="h-4 w-4 text-purple-400" />}
+                      {hoveredElement.type === 'connection' && <Activity className="h-4 w-4 text-blue-400" />}
+                      {hoveredElement.type === 'particle' && <Zap className="h-4 w-4 text-yellow-400" />}
+                      <span className="text-white font-medium text-sm capitalize">{hoveredElement.type}</span>
+                    </div>
+                    <p className="text-gray-300 text-xs leading-relaxed">
+                      {hoveredElement.description}
+                    </p>
+                  </motion.div>
+                )}
+              </div>
               
               {/* Advanced Timeline Navigation */}
               {viewMode === 'timeline' && data.length > 0 && (
@@ -645,6 +762,173 @@ export const AdvancedTimeline: React.FC<AdvancedTimelineProps> = ({
                     </Button>
                   </div>
                 </div>
+              )}
+              
+              {/* Comprehensive Quantum Timeline Briefing Panel */}
+              {viewMode === 'timeline' && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-6 space-y-4"
+                >
+                  {/* Main Briefing Section */}
+                  <div className="glass-base p-4 rounded-lg border border-purple-500/20 bg-gradient-to-r from-purple-500/5 to-blue-500/5">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="space-y-2">
+                        <h4 className="text-white font-medium flex items-center gap-2 text-sm">
+                          <Rocket className="h-4 w-4 text-purple-400" />
+                          Neural Architecture
+                        </h4>
+                        <p className="text-gray-400 text-xs leading-relaxed">
+                          Each contribution creates a neural pathway in your quantum development matrix. The spiral pattern represents evolutionary growth through complexity layers, with each rotation signifying increased mastery.
+                        </p>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <h4 className="text-white font-medium flex items-center gap-2 text-sm">
+                          <Globe className="h-4 w-4 text-blue-400" />
+                          Quantum Entanglement
+                        </h4>
+                        <p className="text-gray-400 text-xs leading-relaxed">
+                          Connections between nodes show how your contributions influence each other across temporal dimensions, creating quantum entanglements that strengthen your development ecosystem.
+                        </p>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <h4 className="text-white font-medium flex items-center gap-2 text-sm">
+                          <Zap className="h-4 w-4 text-yellow-400" />
+                          Evolution Tracking
+                        </h4>
+                        <p className="text-gray-400 text-xs leading-relaxed">
+                          Pulsing effects and orbiting particles indicate active development phases. The quantum energy signatures reveal your current focus areas and evolutionary momentum.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Interactive Legend */}
+                  <div className="glass-base p-4 rounded-lg border border-blue-500/20 bg-gradient-to-r from-blue-500/5 to-cyan-500/5">
+                    <h4 className="text-white font-medium mb-3 flex items-center gap-2">
+                      <Settings className="h-4 w-4 text-cyan-400" />
+                      Quantum Legend & Navigation Guide
+                    </h4>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* Visual Elements */}
+                      <div>
+                        <h5 className="text-sm font-medium text-cyan-300 mb-2">Visual Elements</h5>
+                        <div className="space-y-2 text-xs">
+                          <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-1">
+                              <div className="w-3 h-3 rounded-full bg-purple-500 animate-pulse"></div>
+                              <div className="w-2 h-2 rounded-full bg-white"></div>
+                            </div>
+                            <span className="text-gray-400">Active Neural Node - Currently selected milestone</span>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <div className="w-3 h-3 rounded-full bg-purple-600 opacity-70"></div>
+                            <span className="text-gray-400">Inactive Neural Node - Available milestone</span>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <div className="w-6 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400"></div>
+                            <span className="text-gray-400">Quantum Connection - Temporal influence link</span>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <div className="flex gap-1">
+                              <div className="w-1.5 h-1.5 rounded-full bg-yellow-400 animate-bounce"></div>
+                              <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                              <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                            </div>
+                            <span className="text-gray-400">Quantum Particles - Active energy signatures</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Navigation Controls */}
+                      <div>
+                        <h5 className="text-sm font-medium text-cyan-300 mb-2">Navigation Controls</h5>
+                        <div className="space-y-2 text-xs">
+                          <div className="flex items-center gap-3">
+                            <kbd className="px-2 py-1 bg-white/10 rounded text-white">Click</kbd>
+                            <span className="text-gray-400">Select neural node to explore milestone</span>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <kbd className="px-2 py-1 bg-white/10 rounded text-white">Hover</kbd>
+                            <span className="text-gray-400">Reveal quantum information tooltip</span>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <kbd className="px-2 py-1 bg-white/10 rounded text-white">◄ ►</kbd>
+                            <span className="text-gray-400">Navigate through timeline sequence</span>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <kbd className="px-2 py-1 bg-white/10 rounded text-white">Auto</kbd>
+                            <span className="text-gray-400">Activate quantum evolution playback</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Status Dashboard */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="glass-base p-4 rounded-lg border border-green-500/20 bg-gradient-to-r from-green-500/5 to-emerald-500/5">
+                      <h4 className="text-white font-medium mb-3 flex items-center gap-2">
+                        <BarChart3 className="h-4 w-4 text-green-400" />
+                        Quantum Metrics
+                      </h4>
+                      <div className="grid grid-cols-2 gap-3 text-xs">
+                        <div className="flex justify-between">
+                          <span className="text-gray-400">Neural Nodes:</span>
+                          <span className="text-green-400 font-medium">{data.length}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-400">Quantum Links:</span>
+                          <span className="text-blue-400 font-medium">{Math.max(data.length - 1, 0)}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-400">Evolution State:</span>
+                          <span className="text-purple-400 font-medium">{data.length > 0 ? 'Active' : 'Dormant'}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-400">Quantum Level:</span>
+                          <span className="text-yellow-400 font-medium">L{Math.min(Math.floor(data.length / 3) + 1, 10)}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="glass-base p-4 rounded-lg border border-amber-500/20 bg-gradient-to-r from-amber-500/5 to-orange-500/5">
+                      <h4 className="text-white font-medium mb-3 flex items-center gap-2">
+                        <Target className="h-4 w-4 text-amber-400" />
+                        Current Status
+                      </h4>
+                      <div className="space-y-2 text-xs">
+                        {data.length > 0 ? (
+                          <>
+                            <div className="flex items-center justify-between">
+                              <span className="text-gray-400">Active Node:</span>
+                              <span className="text-amber-400 font-medium">{activeStep.time}</span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-gray-400">Progress:</span>
+                              <span className="text-green-400 font-medium">
+                                {Math.round((data.findIndex(item => item.time === activeStep.time) + 1) / data.length * 100)}%
+                              </span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-gray-400">Energy Level:</span>
+                              <span className="text-blue-400 font-medium">Quantum Active</span>
+                            </div>
+                          </>
+                        ) : (
+                          <div className="text-center py-2">
+                            <div className="text-gray-500">Quantum Timeline Initializing...</div>
+                            <div className="text-xs text-gray-600 mt-1">Create your first contribution to activate</div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
               )}
             </div>
           </Card>

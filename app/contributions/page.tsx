@@ -7,7 +7,7 @@ import {
   GitBranch, GitCommit, GitPullRequest, Star, GitFork, Users, 
   Calendar, Clock, TrendingUp, Award, Code, Target, Zap,
   Filter, Search, ArrowUpRight, ChevronDown, Eye, Rocket,
-  Box, Lock, Globe, Settings, Bolt, Wand2
+  Box, Lock, Globe, Settings, Bolt, Wand2, Shield
 } from "lucide-react";
 
 import Navbar from "@/components/Navbar";
@@ -320,7 +320,56 @@ export default function ContributionsPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-6">
-                <AdvancedTimeline data={[]} />
+                <AdvancedTimeline data={[
+                  {
+                    time: "Q1 2024",
+                    steps: [
+                      {
+                        icon: <Rocket className="h-5 w-5 text-purple-400" />,
+                        content: "Initiated quantum development journey with first smart contract deployment on Avalanche testnet. Established neural pathways for blockchain interaction.",
+                        achievement: "Blockchain Pioneer",
+                        reward: "2.5 AVAX",
+                        difficulty: "Medium",
+                        category: "Genesis",
+                        date: "2024-01-15",
+                        stats: { commits: 15, impact: 25, collaborators: 3 }
+                      }
+                    ],
+                    monthlyStats: { totalCommits: 15, totalRewards: 2.5, projectsContributed: 1, avgDifficulty: 2 }
+                  },
+                  {
+                    time: "Q2 2024",
+                    steps: [
+                      {
+                        icon: <Shield className="h-5 w-5 text-blue-400" />,
+                        content: "Advanced quantum entanglement through DeFi protocol development. Created yield farming mechanisms with enhanced security protocols.",
+                        achievement: "DeFi Architect",
+                        reward: "8.5 AVAX",
+                        difficulty: "Hard",
+                        category: "Evolution",
+                        date: "2024-04-20",
+                        stats: { commits: 45, impact: 75, collaborators: 8 }
+                      }
+                    ],
+                    monthlyStats: { totalCommits: 45, totalRewards: 8.5, projectsContributed: 3, avgDifficulty: 3 }
+                  },
+                  {
+                    time: "Q3 2024",
+                    steps: [
+                      {
+                        icon: <Zap className="h-5 w-5 text-yellow-400" />,
+                        content: "Quantum breakthrough in security auditing. Discovered critical vulnerabilities using advanced cryptographic analysis and neural pattern recognition.",
+                        achievement: "Security Oracle",
+                        reward: "12.0 AVAX",
+                        difficulty: "Expert",
+                        category: "Mastery",
+                        date: "2024-07-10",
+                        stats: { commits: 67, impact: 95, collaborators: 12 }
+                      }
+                    ],
+                    monthlyStats: { totalCommits: 67, totalRewards: 12.0, projectsContributed: 5, avgDifficulty: 4 }
+                  }
+                ]} />
               </CardContent>
             </Card>
           </motion.div>
