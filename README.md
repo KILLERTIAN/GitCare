@@ -7,9 +7,9 @@ GitCare is a **decentralized open-source contribution platform** that enables ma
 ---
 
 ## ✨ Features
-- 🏗️ **Bounty Creation** – Maintainers can create bounties with ETH rewards.
-- 💻 **Work Submission** – Contributors can submit GitHub PR links or IPFS proofs.
-- ✅ **Approval System** – Maintainers approve valid work and trigger payment.
+- 🏗️ **Bounty Creation** – Maintainers can create bounties with rewards.
+- 💻 **Work Submission** – Contributors can submit GitHub PR links.
+- ✅ **Approval System** – Automated approval valid work and trigger payment.
 - 💰 **Automated Payouts** – Rewards are sent directly to the contributor’s wallet.
 - 📊 **Reputation Tracking** – Contributors build a verifiable on-chain reputation.
 - 🔒 **Secure & Transparent** – Smart contracts handle logic, no intermediaries.
